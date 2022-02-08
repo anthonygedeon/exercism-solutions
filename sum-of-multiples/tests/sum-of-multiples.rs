@@ -11,6 +11,11 @@ fn one_factor_has_multiples_within_limit() {
 }
 
 #[test]
+fn multiple_factors_within_limit() {
+    assert_eq!(78, sum_of_multiples(20, &[3, 5]))
+}
+
+#[test]
 fn more_than_one_multiple_within_limit() {
     assert_eq!(9, sum_of_multiples(7, &[3]))
 }
