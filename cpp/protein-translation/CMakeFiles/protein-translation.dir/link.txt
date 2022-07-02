@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/protein-translation.dir/protein_translation_test.cpp.o CMakeFiles/protein-translation.dir/protein_translation.cpp.o CMakeFiles/protein-translation.dir/test/tests-main.cpp.o -o protein-translation 
