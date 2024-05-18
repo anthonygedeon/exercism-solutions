@@ -1,0 +1,70 @@
+# Determine if a triangle is equilateral, isosceles, or scalene.
+# 0 - scalene
+# 1 - isoceles
+# 2 - equilateral
+# 3 - invalid triangle
+
+.text
+.globl triangle
+triangle:
+#	li $a0, 0
+#	li $a1, 0
+#	li $a2, 0
+    move $v0, $zero
+
+is_triangle:
+    # all sides have to be of length > 0
+    bgt $a0, $zero, is_triangle.set
+    bgt $a1, $zero, is_triangle.set
+    bgt $a2, $zero, is_triangle.set
+
+    # sum of any two sides must be greater than or equal to the length of the third side
+    add $t0, $a0, $a1
+	sge $t0, $t0, $a2
+	beq $t0, $zero is_scalene
+	
+	li $v0, 3
+	jal ret_invalid # else
+
+is_scalene:
+    # $a0 != $a1 && $a0 != $a2 && $a1 != $a2
+    bne $a0, $a1, is_scalene.set
+    bne $a0, $a2, is_scalene.set
+    bne $a1, $a2, is_scalene.set
+    j ret
+
+is_isoceles:
+    # $a0 == $a1 || $a0 == $a2 || $a1 == $a2
+    seq $t0, $a0, $a1
+    seq $t1, $a0, $a2
+    seq $t2, $a1, $a2
+    or $t0, $t0, $t1
+    or $t0, $t0, $t2
+    li $t3, 1
+    beq $t0, $t3, is_isoceles.set
+
+is_equilateral:
+    # !($a0 == $a1 && $a0 == $a2 && $a1 == $a2)
+    bne $a0, $a1, is_equilateral.set
+    bne $a0, $a2, is_equilateral.set
+    bne $a1, $a2, is_equilateral.set
+    li $v0, 2
+	jr $ra
+
+is_scalene.set:
+    li $v0, 0
+    b is_scalene
+
+is_isoceles.set:
+    li $v0, 1
+    b is_isoceles
+
+is_triangle.set:
+    li $v0, 3
+
+ret_invalid:
+	#move $a0, $v0
+	#li $v0, 1
+	#syscall
+	li $v0, 3
+	jr $ra

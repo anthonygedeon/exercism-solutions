@@ -1,0 +1,56 @@
+# An isogram is a word or phrase without a repeating letter, however spaces and hyphens 
+# are allowed to appear multiple times.
+
+.text
+.globl is_isogram
+is_isogram:
+	la $t0, ($a0)
+	la $t2, ($a0)
+	la $t3, ($ra)
+
+loop:
+	lb $a0, ($t0)
+loop_1:
+	beqz $a0, ret_1
+	beq $a0, ' ', skip
+	beq $a0, '-', skip
+	ble $a0, 'A', tolower
+	
+	jal search
+		
+	li $v0, 11
+	syscall
+	
+	addu $t0, $t0, 1
+	la $t2, ($t0)			
+		
+	j loop
+
+search:
+	addu $t2, $t2, 1
+	lb $t1, ($t2)
+	beq $a0, $t1, ret_0
+	beqz $t1, goback
+	
+	j search
+
+goback:
+	jr $ra
+
+skip:
+	addu $t0, $t0, 1
+	la $t2, ($t0)			
+	j loop
+tolower:
+	addu $a0, $a0, 32
+	j loop_1
+	
+ret_1:
+	la $ra, ($t3)
+	li $v0, 1
+	jr $ra
+
+ret_0:
+	la $ra, ($t3)
+	li $v0, 0
+	jr $ra

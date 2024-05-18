@@ -1,0 +1,53 @@
+# Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.
+
+.text
+.globl difference_of_squares
+difference_of_squares:
+	beqz $a0, const_done
+	li $t0, 0
+	li $t1, 0
+	li $t2, 0
+	li $t3, 0
+	li $t4, 0
+	move $v0, $zero
+	j square_of_sum
+
+square_of_sum:
+	li $t0, 1								# int sum = 1
+	li $t1, 1 								# counter 
+	j square_of_sum.loop	
+
+square_of_sum.loop:
+	addiu $t1, $t1, 1						# increment counter
+	addu $t0, $t0, $t1
+	bne $t1, $a0, square_of_sum.loop
+	j square_of_sum.done
+
+square_of_sum.done:
+	mult $t0, $t0
+	mflo $t0
+
+sum_of_squares:
+	li $t1, 1								# int sum = 1
+	li $t2, 0								# counter
+	move $t4, $zero
+	j sum_of_squares.loop	
+
+sum_of_squares.loop:
+	addiu $t2, $t2, 1 						# increment counter
+	mult $t1, $t1
+	move $t4, $t3
+	mflo $t3
+	addu $t1, $t1, 1
+	addu $t3, $t3, $t4
+	bne $t2, $a0, sum_of_squares.loop
+	j done
+
+done:
+	subu $v0, $t0, $t3
+	jr $ra
+
+const_done:
+	move $v0, $zero
+	jr $ra
+

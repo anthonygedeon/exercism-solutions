@@ -1,0 +1,4 @@
+/home/anthony/repos/github.com/exercism/cpp/matching-brackets/build/CMakeFiles/matching-brackets.dir
+/home/anthony/repos/github.com/exercism/cpp/matching-brackets/build/CMakeFiles/test_matching-brackets.dir
+/home/anthony/repos/github.com/exercism/cpp/matching-brackets/build/CMakeFiles/edit_cache.dir
+/home/anthony/repos/github.com/exercism/cpp/matching-brackets/build/CMakeFiles/rebuild_cache.dir

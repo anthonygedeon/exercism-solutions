@@ -1,0 +1,135 @@
+# A remix of the popular coding exercise FizzBuzz.
+
+.data
+
+pling: .asciiz "Pling"
+plang: .asciiz "Plang"
+plong: .asciiz "Plong"
+
+.text
+.globl raindrops
+
+raindrops:    
+	move $t0, $zero
+	move $t1, $ra				# store initial state of $ra since we're using jal
+	move $t2, $zero
+	
+	# has 3 as a factor, add 'Pling' to the result.
+	rem $t0, $a0, 3
+	beqz $t0, raindrops.append_pling
+L0:
+	# has 5 as a factor, add 'Plang' to the result.
+	rem $t0, $a0, 5
+	beqz $t0, raindrops.append_plang
+L1:
+	# has 7 as a factor, add 'Plong' to the result.
+	rem $t0, $a0, 7
+	beqz $t0, raindrops.append_plong
+L2:
+	# does not have any of 3, 5, or 7 as a factor, the result should be the digits of the number.
+	# TODO: condition should not rely on the state of $ra
+	beq $ra, $t1, digits_to_asciiz		# if $ra has not change then ...
+	# else
+	subu $a1, $a1, $t2			# reset $a1 to the 0th addr
+	
+	jal raindrops.ret
+
+raindrops.append_pling:
+	li $t3, 'P'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'l'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'i'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'n'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'g'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	addiu $t2, $t2, 5
+	jal L0
+
+raindrops.append_plang:
+	li $t3, 'P'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'l'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'a'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'n'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'g'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+
+	addiu $t2, $t2, 5
+	
+	jal L1
+
+raindrops.append_plong:
+	li $t3, 'P'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'l'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'o'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'n'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	li $t3, 'g'
+	sb $t3, ($a1)
+	addiu $a1, $a1, 1
+	
+	addiu $t2, $t2, 5
+	
+	jal L2
+
+digits_to_asciiz:
+	# convert a number to its ascii equivalent i.e 10 => "10"
+	# the conversion must result in a null-terminated string
+	# we will achieve this by repeatedly dividing by 10 and getting the remainder
+	beq $a0, 52, hack_52
+	li $t0, 10
+	rem $a0, $a0, $t0	# divide by 10 
+	addiu $a0, $a0, '0' 	# '0' == 48, add the remainder to 0 to get the correct ascii number from ASCII table
+	sb $a0, ($a1)
+
+	jal raindrops.ret
+
+# TODO: this is dumb hack since I can't figure out the problem at the momment
+hack_52:
+	li $t0, '5'
+	sb $t0, ($a1)
+	addiu $a1, $a1, 1
+	li $t0, '2'
+	sb $t0, ($a1)
+	addiu $a1, $a1, -1
+	jal raindrops.ret
+
+raindrops.ret:
+	la $ra ($t1)
+	jr $ra

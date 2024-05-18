@@ -1,0 +1,10 @@
+[package]
+edition = "2021"
+name = "macros"
+version = "0.1.0"
+
+[dependencies]
+
+[dev-dependencies]
+trybuild = "1.0"
+

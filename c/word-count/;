@@ -1,0 +1,103 @@
+#include "word_count.h"
+#include <ctype.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <regex.h>
+
+#define ARRAY_LENGTH(x) (sizeof(x) / sizeof(x[0]))
+#define WORD_REGEX "[[:alnum:]']+[[:alnum:]]?"
+#define MAX_REGEX_MATCHES   10
+#define MAX_ERR_LENGTH      50
+
+// int findall(const char *str, regex_t *re, char buffer[MAX_WORDS][MAX_WORD_LENGTH]) {
+// 	regmatch_t matches;
+//
+// 	size_t offset = 0;
+// 	size_t count = 0;
+// 	while (regexec(re, str, 1, &matches, 0) == 0) {
+// 		int len = matches.rm_eo - matches.rm_so;
+// 		// printf("Matches: %d %d\n", matches.rm_eo, matches.rm_so);
+// 		memcpy(buffer[count], str + offset, len);
+// 		buffer[count][len] = '\0';
+// 		// printf("String: \"%s\" Len: %d Offset: %c\n", buffer[count], len, buffer[count][offset]);
+// 		
+// 		printf("%.*s, \n", len, (buffer[count] + matches.rm_so));
+//
+// 		count++;
+// 		// offset += matches.rm_eo + 1;
+//
+// 		str += matches.rm_eo;
+// 	}
+//
+// 	regfree(re);
+//
+// 	return count;
+// }
+//
+
+/**
+ * Test regex against string. Requires 2D char array large enough to store found matches.
+ * 
+ * @param source 
+ * @param pattern 
+ * @param matches 
+ * @return int - Number of matches found
+ */
+int findall(const char *source, const char *pattern, char matches[][MAX_WORD_LENGTH]) {
+	size_t count = 0;
+  size_t maxMatches = 5;
+  size_t maxGroups = 10;
+  
+  regex_t regexCompiled;
+  regmatch_t groupArray[maxGroups];
+  char * cursor = (char*)source;
+
+  if (regcomp(&regexCompiled, pattern, REG_EXTENDED)) {
+      printf("Could not compile regular expression.\n");
+      return -1;
+	}
+
+  for (size_t m = 0; m < maxMatches; m ++) {
+      if (regexec(&regexCompiled, cursor, maxGroups, groupArray, 0))
+        break;  // No more matches
+
+      unsigned int offset = 0;
+      for (size_t g = 0; g < maxGroups; g++) {
+          if (groupArray[g].rm_so == -1) break;  // No more groups
+          if (g == 0) offset = groupArray[g].rm_eo;
+			
+          char cursorCopy[strlen(cursor) + 1];
+
+          strcpy(cursorCopy, cursor);
+          cursorCopy[groupArray[g].rm_eo] = 0;
+
+          printf("Match %lu, Group %lu: [%2u-%2u]: %s\n",
+                 m, g, groupArray[g].rm_so, groupArray[g].rm_eo,
+                 cursorCopy + groupArray[g].rm_so);
+			int len = groupArray[g].rm_eo - groupArray[g].rm_so;
+		  memcpy(matches[m], cursorCopy + groupArray[g].rm_eo, len);
+		  matches[m][len] = '\0';
+        }
+
+      cursor += offset;
+	  count++;
+    }
+
+  regfree(&regexCompiled);
+
+  return count;
+}
+
+
+int count_words(const char *sentence, word_count_word_t *words) {
+	(void)words;
+	char matches[MAX_WORDS][MAX_WORD_LENGTH];
+
+	int size = findall(sentence, WORD_REGEX, matches);
+	for(int i = 0; i < size; i++) {
+		printf("%s\n", matches[i]);
+	}
+	return 0;
+}
+

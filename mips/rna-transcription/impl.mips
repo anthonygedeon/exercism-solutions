@@ -1,0 +1,48 @@
+.text
+.globl transcribe_rna
+transcribe_rna:	
+	li $t0, 0
+	li $t1, 0
+	li $t2, 0
+	li $t3, 0	
+
+	la $t1, ($a0)
+	la $t3, ($a1)
+
+loop:
+	lb $t0, ($a0)            # get character
+
+	beq $t0, 'G', add_c
+	beq $t0, 'C', add_g
+	beq $t0, 'T', add_a
+	beq $t0, 'A', add_u
+
+jump:
+	add $t1, $t1, 1           # increment $a0 
+	la $a0, ($t1)
+	lb $t0, ($a0)            # get character
+
+	sb $t2, ($a1)
+
+	add $a1, $a1, 1
+
+	bne $t0, $zero, loop
+	
+	la $a1, ($t3)
+	la $v0, ($a1)
+	jr $ra
+
+# append to starting addr of $a1
+add_c:
+	li $t2, 'C'	
+	j jump
+add_g:
+	li $t2, 'G'	
+	j jump
+add_a:
+	li $t2, 'A'	
+	j jump
+add_u:
+	li $t2, 'U'	
+	j jump
+

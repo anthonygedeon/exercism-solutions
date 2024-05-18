@@ -1,0 +1,4 @@
+/home/anthony/snap/exercism/5/exercism/cpp/protein-translation/CMakeFiles/protein-translation.dir
+/home/anthony/snap/exercism/5/exercism/cpp/protein-translation/CMakeFiles/test_protein-translation.dir
+/home/anthony/snap/exercism/5/exercism/cpp/protein-translation/CMakeFiles/edit_cache.dir
+/home/anthony/snap/exercism/5/exercism/cpp/protein-translation/CMakeFiles/rebuild_cache.dir

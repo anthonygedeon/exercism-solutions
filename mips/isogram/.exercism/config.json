@@ -1,0 +1,19 @@
+{
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "authors": [
+    "ozan"
+  ],
+  "files": {
+    "solution": [
+      "impl.mips"
+    ],
+    "test": [
+      "runner.mips"
+    ],
+    "example": [
+      ".meta/example.mips"
+    ]
+  },
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram"
+}

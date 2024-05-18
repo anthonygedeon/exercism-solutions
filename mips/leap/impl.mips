@@ -1,0 +1,42 @@
+# C-style implementation
+# if (year % 4 == 0) 
+# 	if (year % 100 != 0) 
+# 		return true;
+# 	else if (year % 400 == 0) 
+# 		return true;
+# return false;
+
+.text
+.globl is_leap_year
+
+is_leap_year:
+	li $t0, 4              			# load 4 into reg t0
+	li $t1, 0			   			# load 0 into reg t1
+	
+	rem $t1, $a0, $t0
+	beq $t1, $zero, check_cond   	# if year % 4 == 0
+	
+	j not_leap_year
+
+is_leap:
+	li $v0, 1
+	jr $ra
+
+check_cond:
+	li $t0, 100
+	li $t1, 0
+
+	rem $t1, $a0, $t0
+	bne $t1, $zero, is_leap
+
+	li $t0, 400
+	li $t1, 0
+
+	rem $t1, $a0, $t0
+	beq $t1, $zero, is_leap
+	
+	j not_leap_year
+
+not_leap_year:
+	li $v0, 0
+	jr $ra

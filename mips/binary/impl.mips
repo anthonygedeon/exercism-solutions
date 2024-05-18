@@ -1,0 +1,46 @@
+# Convert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent 
+# i.e 101010 => 42
+
+.text
+.globl binary_convert
+binary_convert:
+	lb $t0, ($a0)
+	li $t2, 0
+	li $t3, 1         # accumulator
+	li $t5, -1        # counter - start at -1 to acccomodate with jumping to sum too early
+	li $t6, 0
+
+	# Handle case of when to stop popping from stack
+	subu $sp, $sp, 1  # allocate space for stack
+	sb $zero, ($sp)   # push const-0 to stack
+
+binary_convert.push:
+	lbu $t0, ($a0)
+	beqz $t0, binary_convert.pop     # if (reg == '\0') stop loop
+
+	subu $sp, $sp, 1  # allocate space for stack
+	sb $t0, ($sp)     # push $a0 to stack
+
+	addu $a0, $a0, 1  # increment the addr to point to the next char
+
+	j binary_convert.push 			  # loop
+
+binary_convert.pop:
+	lbu $t0, ($sp)    # copy value from top of stack
+	addu $sp, $sp, 1  # pop stack 
+
+	addi $t5, $t5, 1  # increment counter
+	beq $t0, '1', binary_convert.squared_sum # 01011
+
+	beqz $t0, binary_convert.print   # if (reg == 0) stop loop
+
+	j binary_convert.pop             # loop
+
+binary_convert.squared_sum:
+	sllv $t2, $t3, $t5 # (1<<1)+(1<<3)+(1<<4)
+	addu $t6, $t6, $t2
+	j binary_convert.pop
+
+binary_convert.print:
+	move $v0, $t6	
+	jr $ra

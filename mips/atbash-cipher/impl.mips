@@ -1,0 +1,56 @@
+.text
+.globl atbash_cipher
+atbash_cipher:
+	la $t0, ($a0)
+	la $t3, ($a1)
+	la $t6, ($a1)
+	la $t5, ($ra)
+	
+loop:	
+	lb $a0, ($t0)
+	beq $a0, $zero, break
+	beq $a0, ' ', skip
+	beq $a0, '.', skip
+	ble $a0, 'Z', handle_upper
+	bge $a0, 'a', handle_lower # if ($a0 >= 'a' && $a0 <= 'z')
+	
+cipher:
+	li $t2, 'z'
+	subu $t1, $t2, $t1
+	sb $t1, ($a1)
+	
+	addu $t0, $t0, 1
+	addu $a1, $a1, 1
+	jal strlen
+	j loop
+	
+handle_lower:
+	rem $t1, $a0, 'a' 		# 'z' - (char % 'a')
+	j cipher
+handle_upper:
+	rem $t1, $a0, 'A'		# 'z' - (char % 'A')
+	j cipher
+
+strlen:
+	sub $t4, $a1, $t3
+	beq $t4, 5, add_space
+	jr $ra
+
+add_space:
+	add $t7, $t0, 1
+	lb $a0, ($t7)
+	beq $a0, $zero, break 
+	li $t4, ' '
+	sb $t4, ($a1)
+	addu $a1, $a1, 1
+	addu $t3, $t3, 6
+	jr $ra
+
+skip:
+	addu $t0, $t0, 1
+	j loop
+
+break:
+	la $a1, ($t6)
+	la $ra, ($t5)
+ 	jr $ra
