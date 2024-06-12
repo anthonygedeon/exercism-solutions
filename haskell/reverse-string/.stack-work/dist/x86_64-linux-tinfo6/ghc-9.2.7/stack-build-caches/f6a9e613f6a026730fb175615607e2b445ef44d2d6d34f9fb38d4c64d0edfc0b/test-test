@@ -1,0 +1,14 @@
+/home/badhat/.stack/programs/x86_64-linux/ghc-tinfo6-9.2.7/lib/ghc-9.2.7/include/ghcversion.h:
+  hash: d590b76d2d5f98f01894882dc106d920a101f52edb6a09b9a7f8dc701b075565
+? /home/badhat/projects/exercism-solutions/haskell/reverse-string/.stack-work/dist/x86_64-linux-tinfo6/ghc-9.2.7/build/test/autogen/Paths_reverse_string.hs
+: hash: d19b890f98bf11411f6b0e7a86b45047a86934364938bea4e6ccb3373dc62098
+? /home/badhat/projects/exercism-solutions/haskell/reverse-string/.stack-work/dist/x86_64-linux-tinfo6/ghc-9.2.7/build/test/autogen/cabal_macros.h
+: hash: e4df7b010aa40f65870d0e7ef28775e22b05ae155bb9ba3a641fe3b29ec1073e
+/home/badhat/projects/exercism-solutions/haskell/reverse-string/package.yaml:
+  hash: b890e1480b3250833d7ab93c04b7bd4033e0b9cbfeb80993edf2f6d8ec141585
+/home/badhat/projects/exercism-solutions/haskell/reverse-string/reverse-string.cabal:
+  hash: 06e53c3c47c15f609cfebe0838351f089fd57ad3c30326c7018e073a85d34fde
+/home/badhat/projects/exercism-solutions/haskell/reverse-string/test/Tests.hs:
+  hash: eebd1102b600e9983bfbfb9f06c9ca3ce3f8cb206d758c7ef4f12fd9b650b1c2
+/usr/include/stdc-predef.h:
+  hash: cb08cd5d4cc059a90833ac48a284d25016e8d56ded8ad4cd98d8ac59cc5053f3
